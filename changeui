@@ -1,0 +1,38 @@
+#!/system/xbin/bash
+
+FILE=/system/build.prop
+BAKFILE=/system/build.prop.bak
+NEWFILE=$FILE.`simpledate`
+
+remount-rw-system
+touch $NEWFILE
+
+if [ ! -f $FILE ]; then
+	echo "The 'build.prop' file is missing. Copying from backup 'build.prop.bak'..."
+	cat $BAKFILE >$FILE
+	chmod 644 $FILE
+fi
+
+if [ $1 == 'tablet' ]; then
+	echo "Modifying 'build.prop' for tablet UI..."
+	sed -r \
+		-e 's|^(ro.sf.lcd_density)=.*$|\1=120|g' \
+		-e 's|^(ro.build.characteristics)=.*$|\1=tablet|g' \
+		<$FILE >$NEWFILE
+else
+	echo "Modifying 'build.prop' for phone UI..."
+        sed -r \
+                -e 's|^(ro.sf.lcd_density)=.*$|\1=240|g' \
+                -e 's|^(ro.build.characteristics)=.*$|\1=default|g' \
+                <$FILE >$NEWFILE
+fi
+
+chmod 644 $NEWFILE
+cat $NEWFILE >$FILE
+chmod 644 $FILE
+
+echo 'Rebooting now...'
+/system/bin/reboot
+
+
+

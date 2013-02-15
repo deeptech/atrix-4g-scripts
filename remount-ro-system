@@ -1,0 +1,6 @@
+#!/system/xbin/bash
+
+echo "Remounting '/system' as read-only..."
+mount -o remount,ro -t yaffs2 /dev/block/mmcblk0p12 /system
+
+

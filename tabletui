@@ -1,0 +1,4 @@
+#!/system/xbin/bash
+
+changeui tablet
+

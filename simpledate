@@ -1,0 +1,3 @@
+#!/system/xbin/bash
+
+date +%Y%m%d%H%M%S
